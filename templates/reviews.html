@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+
+{% block navbar_list %}
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+ {% if signed_in %}
+ <a class="navbar-brand" href="{{url_for('index')}}"> Good Reads </a>
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('search')}}">Search </a>
+   </li>
+   <li class="nav-item active">
+     <a class="nav-link" href="{{url_for('reviews')}}"> Reviews</a>
+   </li>
+   <li class="nav-item"> 
+     <a class="nav-link" href="#">
+       Welcome: {{signed_in}} 
+    </a>
+   </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('logout')}}"> Logout</a>
+   </li>  
+  </ul>
+
+  {% else %}
+	<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	   <li class="nav-item">
+	     <a class="nav-link" href="{{url_for('login')}}">Login </a>
+	   </li>
+	   <li class="nav-item">
+	     <a class="nav-link" href="{{url_for('register')}}"> Register</a>
+	   </li>
+	  
+	</ul>
+
+  {% endif %}
+</div>
+{% endblock%}
+
+{% block body %}
+ <h1 class='text-center'>All My Reviews</h1>
+ <div class="ui feed container">
+
+ {% for comment in reviews %}
+  <div class="event">
+    <div class="label">
+      <img src="https://cdn.psychologytoday.com/sites/default/files/styles/article-inline-half/public/blogs/82893/2012/04/93124-89483.jpg?itok=t2DayNm8">
+    </div>
+    <div class="content">
+      <div class="summary">
+      	<div class="rating">{{comment.rating}}/5</div><br>
+        <a class="user">
+          {{signed_in}}
+        </a> added a review for isbn: <a href="{{url_for('book',isbn=comment.isbn)}}">{{comment.isbn}}</a>
+        
+      </div>
+       <div class="extra text">
+        {{comment.review}}
+        <br>
+        
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+ </div>
+
+
+{% endblock %}

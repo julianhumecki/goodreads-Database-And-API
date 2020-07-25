@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+
+{% block navbar_list %}
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+ {% if signed_in %}
+ <a class="navbar-brand" href="{{url_for('index')}}"> Good Reads </a>
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+   <li class="nav-item">
+     <a class="nav-link active" href="{{url_for('search')}}">Search </a>
+   </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('reviews')}}"> Reviews</a>
+   </li>
+  <li class="nav-item"> 
+     <a class="nav-link" href="#">
+       Welcome: {{signed_in}} 
+    </a>
+  </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('logout')}}"> Logout</a>
+   </li>
+  </ul>
+  
+  {% else %}
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+     <li class="nav-item">
+       <a class="nav-link" href="{{url_for('login')}}">Login </a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link" href="{{url_for('register')}}"> Register</a>
+     </li>
+    
+  </ul>
+
+  {% endif %}
+</div>
+{% endblock%}
+
+{% block body %}
+ <h1 class='text-center'>Search</h1>
+    <form action="{{ url_for('search') }}" method="post">
+      <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+          <div class="searchbar">
+            <input class="search_input" type="text" name="search-term" placeholder="Search...">
+            <button class="search_icon"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="search-results container">
+      {% if empty %}
+        <h2 class="text-center" style='color:red;'>No Matches </h2>
+      {% endif %}
+
+      {% if not search_results|length == 0 %}
+        {% if not search_results['author']|length == 0 %}
+          <h2> Results By Author </h2>
+
+          {% for result in search_results['author'] %}
+
+            <!-- check ends -->
+            {% if loop.index0 in start_close[1] %}
+              </div>
+            {% endif %}
+            <!-- check start -->
+            {% if loop.index0 in start_close[0]%}
+              <div class="row">
+            {% endif %}
+              <span class="card style-results">
+                <div class="card-body">
+                  <h5 class="card-title"> {{ result[1].upper() }}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">By: {{ result[2].capitalize() }}</h6>
+                  <p class="card-text"></p>
+                  <button class='btn btn-info'>
+                    <a href="{{url_for('book',isbn=result[0])}}" class="card-link">See more </a>
+                  </button>
+                </div>
+              </span>
+       
+          {% endfor %}
+
+          </div>
+          <br>
+        {% endif %}
+        
+        <!-- titles -->
+        {% if not search_results['title']|length == 0 %}
+          <h2> Results By Title </h2>
+
+          {% for result in search_results['title'] %}
+
+            <!-- check ends -->
+            {% if loop.index0 in start_close[1] %}
+              </div>
+            {% endif %}
+            <!-- check start -->
+            {% if loop.index0 in start_close[0]%}
+              <div class="row">
+            {% endif %}
+              <span class="card style-results">
+                <div class="card-body">
+                  <h5 class="card-title"> {{ result[1].upper() }}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">By: {{ result[2].capitalize() }}</h6>
+                  <p class="card-text"></p>
+                  <button class='btn btn-info'>
+                    <a href="{{url_for('book',isbn=result[0])}}" class="card-link">See more </a>
+                  </button>
+                </div>
+              </span>
+       
+          {% endfor %}
+
+          </div>
+          <br>
+        {% endif %}
+        <!-- ISBN -->
+        {% if not search_results['isbn']|length == 0 %}
+          <h2> Results By ISBN </h2>
+
+          {% for result in search_results['isbn'] %}
+
+            <!-- check ends -->
+            {% if loop.index0 in start_close[1] %}
+              </div>
+            {% endif %}
+            <!-- check start -->
+            {% if loop.index0 in start_close[0]%}
+              <div class="row">
+            {% endif %}
+              <span class="card style-results">
+                <div class="card-body">
+                  <h5 class="card-title"> {{ result[1].upper() }}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">By: {{ result[2].capitalize() }}</h6>
+                  <p class="card-text"></p>
+                  <button class='btn btn-info'>
+                    <a href="{{url_for('book',isbn=result[0])}}" class="card-link">See more </a>
+                  </button>
+                </div>
+              </span>
+       
+          {% endfor %}
+
+          </div>
+
+        {% endif %}
+
+      {% else %}
+        <h2> Search results will show here </h2>
+      {% endif%}
+    </div>
+
+
+
+{% endblock %}

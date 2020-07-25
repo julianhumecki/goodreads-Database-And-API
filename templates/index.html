@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block navbar_list %}
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+ {% if signed_in %}
+ <a class="navbar-brand" href="{{url_for('index')}}"> Good Reads </a>
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('search')}}">Search </a>
+   </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('reviews')}}"> Reviews</a>
+   </li>
+   <li class="nav-item"> 
+     <a class="nav-link" href="#">
+       Welcome: {{signed_in}} 
+    </a>
+  </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('logout')}}"> Logout</a>
+   </li>
+  
+  </ul>
+ 
+  {% else %}
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+     <li class="nav-item">
+       <a class="nav-link" href="{{url_for('login')}}">Login </a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link" href="{{url_for('register')}}"> Register</a>
+     </li>
+    
+  </ul>
+
+  {% endif %}
+</div>
+{% endblock%}
+
+{% block body %}
+
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to your personal book reviewer!</h1>
+  <div class='text-center'>
+  	 <p class="lead">You can search for book by name, author, or even by isbn!</p>
+  	<button type="button" class="btn btn-info"> 
+  		<a href="{{url_for('search')}}"> Search </a>
+  	</button>
+  </div>
+  <hr class="my-4">
+  <div class='text-center'>
+	  <p> Want to see all your reviews? Head over to reviews! </p>
+    <p> Feel like adding a review? Head over to search, find the book, click see more and add your review!<br> You can only add <strong>1 review/book!! </strong></p>
+
+  	<button type="button" class="btn btn-info"> 
+  		<a href="{{url_for('reviews')}}"> Reviews </a>
+  	</button>
+  </div>
+</div>
+
+<div class='text-center'>
+  <div class="ui statistic">
+    <div class="label">
+      Views
+    </div>
+    <div class="value">
+      140,040,509
+    </div>
+    <div>Just kidding haha; would be cool though ;)</div>
+  </div>
+</div>
+
+{% endblock %}

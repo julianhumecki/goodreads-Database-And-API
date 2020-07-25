@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+
+{% block navbar_list %}
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+ {% if signed_in %}
+ <a class="navbar-brand" href="{{url_for('index')}}"> Good Reads </a>
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('search')}}">Search </a>
+   </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('reviews')}}"> Reviews</a>
+   </li>
+   <li class="nav-item"> 
+     <a class="nav-link" href="#">
+       Welcome: {{signed_in}} 
+    </a>
+  </li>
+   <li class="nav-item">
+     <a class="nav-link" href="{{url_for('logout')}}"> Logout</a>
+   </li>
+  
+  </ul>
+ 
+  {% else %}
+	<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	   <li class="nav-item">
+	     <a class="nav-link" href="{{url_for('login')}}">Login </a>
+	   </li>
+	   <li class="nav-item">
+	     <a class="nav-link" href="{{url_for('register')}}"> Register</a>
+	   </li>
+	  
+	</ul>
+
+  {% endif %}
+</div>
+{% endblock%}
+
+{% block body %}
+
+<div class="ui card" id='card-style'>
+  <div class="image">
+    <img src="{{url}}">
+  </div>
+  <div class="content">
+    <a class="header"> {{book[1].upper()}} </a>
+    <div class="meta">
+      <span class="date">Goodread's Average Rating: 
+	      	<strong> {{average_rating}}/5 </strong>
+	      	<br>
+	  Based on <strong>{{number_ratings}}</strong> reviews.
+	 </span>
+    </div>
+    <div class="description">
+      		By: {{book[2].upper()}}
+	        <br>
+	        Year: {{book[3]}}
+	        <br>
+	       	ISBN: {{book[0]}}
+
+    </div>
+  </div>
+</div>
+
+<div class='container'>
+ <div class="ui comments">
+  <h3 class="ui dividing header">Comments</h3>
+  {% if add_review %}
+   <form action = "{{url_for('book',isbn=book[0])}}" method="post" class="ui reply form">
+   	<div class="field">
+   		<label for='rating'>Rating:</label>
+   		<input type="number" min='0' max='5' step='0.1' name="rating" required="required">
+   	</div>
+   
+    <div class="field">
+      <label for='comment'>Review:</label>
+      <textarea name='comment' required="required" placeholder="sick book!!"></textarea>
+    </div>
+    <div class="ui blue labeled submit icon button">
+      <i class="icon edit"></i> <button>Add Comment</button>
+    </div>
+  </form>
+  {% else %}
+     <form action = "{{url_for('book',isbn=book[0])}}" method="post" class="ui reply form">
+     <input type="hidden" name="_METHOD" value="PUT"/>
+   	<div class="field">
+   		<label for='rating'>Rating:</label>
+   		<input type="number" min='0' max='5' step='0.1' name="rating" required="required" value="{{my_review[3]}}">
+   	</div>
+   
+    <div class="field">
+      <label for='comment'>Review:</label>
+      <textarea name='comment' required="required">{{my_review[4]}}</textarea>
+    </div>
+    <div class="ui blue labeled submit icon button">
+      <i class="icon edit"></i> <button>Edit Comment</button>
+    </div>
+  </form>
+  {% endif %}
+
+  {% for comment in reviews %}
+  <div class="comment">
+    <a class="avatar">
+      <img src="https://cdn-a.william-reed.com/var/wrbm_gb_food_pharma/storage/images/publications/feed/feednavigator.com/article/2020/05/19/the-cow-favors-natural-over-synthetic-vitamin-e/11403541-1-eng-GB/The-cow-favors-natural-over-synthetic-vitamin-E_wrbm_large.jpg">
+    </a>
+    <div class="content">
+      <a class="author">{{comment.username}}</a>
+      <div class="metadata">
+        <span class="date">
+        	 {%if signed_in == comment.username %}
+       			<span style="color:green;">Editing...</button>
+       		{% endif %}
+        </span>
+      </div>
+      <div class="text">
+       {{ comment.review}}
+      
+      </div>
+      
+    </div>
+  </div>
+  {% endfor %}
+  
+
+</div>
+</div>
+{% endblock %}
